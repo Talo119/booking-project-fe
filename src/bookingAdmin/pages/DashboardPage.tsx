@@ -1,8 +1,9 @@
-
-
+import { AdminLayout } from "../layout/AdminLayout";
 
 export const DashboardPage = () => {
-    return (
-        <div>DashBoardPage</div>
-    )
-}
+  return (
+    <AdminLayout>
+      <div>DashBoardPage</div>
+    </AdminLayout>
+  );
+};
