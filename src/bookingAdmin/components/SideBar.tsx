@@ -1,17 +1,5 @@
-import { EditNote } from "@mui/icons-material";
-import {
-  Box,
-  Divider,
-  Drawer,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import theme from "../../theme/theme";
-
+import { Box, Divider, Drawer, List, Toolbar, Typography } from "@mui/material";
+import { ListItemMenu } from "./ListItemMenu";
 export const SideBar = ({ drawerWidth = 240 }) => {
   return (
     <Box
@@ -33,12 +21,7 @@ export const SideBar = ({ drawerWidth = 240 }) => {
         </Toolbar>
         <Divider />
         <List>
-          <ListItemButton>
-            <ListItemIcon>
-              <EditNote sx={{color: `${theme.palette.primary.main}`}} />
-            </ListItemIcon>
-            <ListItemText sx={{color: `${theme.palette.primary.main}`}} primary="Negocio" />
-          </ListItemButton>
+          <ListItemMenu />
         </List>
       </Drawer>
     </Box>
