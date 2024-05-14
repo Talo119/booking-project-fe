@@ -3,6 +3,7 @@ import { ViewCountry } from "./Country.model";
 export type ViewUser = {
     id: string;
     name: string;
+    email:string;
     img?: string;
     country: ViewCountry;
     roles?: Roles[];
@@ -10,6 +11,7 @@ export type ViewUser = {
 
 export type CreateUser = {
     name: string;
+    email: string;
     img?: string;
     country: ViewCountry;
     roles?: Roles[];

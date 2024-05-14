@@ -14,3 +14,16 @@ export const registerUser = createAsyncThunk(
     }
   }
 );
+
+export const getUsers = createAsyncThunk(
+  "data/getUsers",
+  async (_, thunkApi) => {
+    try {
+      const response = await BookingApi.user.getUsers();
+      return response;
+    } catch (error) {
+      console.error(error);
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);

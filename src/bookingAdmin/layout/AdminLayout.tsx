@@ -12,7 +12,7 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
     <Box sx={{ display: "flex" }}>
       <NavBar drawerWith={drawerWith} />
       <SideBar drawerWidth={drawerWith} />
-      <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 6 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
         {children}
       </Box>
     </Box>
