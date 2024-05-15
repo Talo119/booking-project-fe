@@ -68,7 +68,11 @@ export const RegisterForm = () => {
         autoComplete="name"
         autoFocus
       />
-      {errors?.name && <Typography color='red' component='p'>{errors?.name.message}</Typography>}
+      {errors?.name && (
+        <Typography color="red" component="p">
+          {errors?.name.message}
+        </Typography>
+      )}
 
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">País</InputLabel>
@@ -85,7 +89,11 @@ export const RegisterForm = () => {
           <MenuItem value={"30"}>Argentina</MenuItem>
         </Select>
       </FormControl>
-      {errors?.country && <Typography color='red' component='p'>{errors?.country.message}</Typography>}
+      {errors?.country && (
+        <Typography color="red" component="p">
+          {errors?.country.message}
+        </Typography>
+      )}
       <TextField
         {...register("email")}
         margin="normal"
@@ -96,7 +104,11 @@ export const RegisterForm = () => {
         name="email"
         autoComplete="email"
       />
-      {errors?.email && <Typography color='red' component='p'>{errors?.email.message}</Typography>}
+      {errors?.email && (
+        <Typography color="red" component="p">
+          {errors?.email.message}
+        </Typography>
+      )}
       <TextField
         {...register("password")}
         margin="normal"
@@ -108,7 +120,11 @@ export const RegisterForm = () => {
         id="password"
         autoComplete="current-password"
       />
-      {errors?.password && <Typography color='red' component='p'>{errors?.password.message}</Typography>}
+      {errors?.password && (
+        <Typography color="red" component="p">
+          {errors?.password.message}
+        </Typography>
+      )}
       <FormControlLabel
         control={<Checkbox value="remember" color="primary" />}
         label="Remember me"
