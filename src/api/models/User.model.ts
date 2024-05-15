@@ -12,8 +12,9 @@ export type ViewUser = {
 export type CreateUser = {
     name: string;
     email: string;
+    password: string;
     img?: string;
-    country: ViewCountry;
+    country: string;
     roles?: Roles[];
 };
 
