@@ -15,17 +15,29 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { CreateUser } from "../../../api/models/User.model";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useAppDispatch } from '../../../store/hooks';
+import { useAppDispatch } from "../../../store/hooks";
 import { registerUser } from "../../../store/auth/thunks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import {
+  selectCountries,
+  selectCountryState,
+} from "../../../store/admin/country/countrySlice";
+import { getCountries } from "../../../store/admin/country/thunks";
+import { DataState } from "../../../store/commons";
+import { useNavigate } from "react-router-dom";
 
 const schema = yup
   .object({
-    name: yup.string().required(),
-    email: yup.string().email().required(),
-    country: yup.string().min(2).required(),
-    password: yup.string().min(3).required(),
-    confirmPassword: yup.string().min(3).oneOf([yup.ref('passorwd')], 'Las contraseñas deben coincidir').required(),
+    name: yup.string().required("Name is required."),
+    email: yup.string().email().required("Email is required."),
+    country: yup.string().min(2).required("Country is required."),
+    password: yup.string().min(3).required("Password is required."),
+    confirmPassword: yup
+      .string()
+      .min(3)
+      .oneOf([yup.ref("password")], "Las contraseñas deben coincidir")
+      .required("Confirm Password is required."),
   })
   .required();
 
@@ -37,7 +49,10 @@ export const RegisterForm = () => {
       backgroundColor: theme.palette.primary.main,
     };
   });
-  const dispatch =  useAppDispatch();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const countries = useSelector(selectCountries);
+  const countriesState = useSelector(selectCountryState);
   const [saving, setSaving] = useState(false);
   const {
     control,
@@ -51,17 +66,29 @@ export const RegisterForm = () => {
       email: "",
       country: "662a9a74f6468eee52f82949",
       password: "",
-      confirmPassword:"",
+      confirmPassword: "",
       img: "test",
-      roles:['ADMIN_ROLE'],
+      roles: ["ADMIN_ROLE"],
     },
     resolver: yupResolver(schema),
   });
-  const onSubmit: SubmitHandler<CreateUser> = (data) => {
+  useEffect(() => {
+    if (countriesState === DataState.INITIAL) {
+      dispatch(getCountries());
+    }
+  }, [countries, countriesState, dispatch]);
+  const onSubmit: SubmitHandler<CreateUser> = async (data) => {
     setSaving(true);
     console.log(data);
-    dispatch(registerUser(data));
-    reset();
+    const register = await dispatch(registerUser(data));
+    console.log(register);
+    const {
+      meta: { requestStatus },
+    } = register;
+    if (requestStatus === "fulfilled") {
+      reset();
+      navigate("/auth/loging");
+    }
     setSaving(false);
   };
   return (
@@ -74,7 +101,7 @@ export const RegisterForm = () => {
       <Controller
         name="name"
         control={control}
-        render={({field}) =>
+        render={({ field }) => (
           <TextField
             {...field}
             margin="normal"
@@ -86,7 +113,7 @@ export const RegisterForm = () => {
             autoComplete="name"
             autoFocus
           />
-        }
+        )}
       />
       {errors?.name && (
         <Typography color="red" component="p">
@@ -96,23 +123,24 @@ export const RegisterForm = () => {
       <Controller
         name="country"
         control={control}
-        render={({field}) =>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">País</InputLabel>
-          <Select
-            {...field}
-            labelId="pais-label"
-            id="country"
-            label="country"
-            fullWidth
-          >
-            {/* <MenuItem value={"0"}>--Seleccione--</MenuItem> */}
-            <MenuItem value={"662a9a74f6468eee52f82949"}>Honduras</MenuItem>
-            <MenuItem value={"20"}>México</MenuItem>
-            <MenuItem value={"30"}>Argentina</MenuItem>
-          </Select>
-        </FormControl>
-        }
+        render={({ field }) => (
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">País</InputLabel>
+            <Select
+              {...field}
+              labelId="pais-label"
+              id="country"
+              label="country"
+              fullWidth
+            >
+              {countries.map((country) => (
+                <MenuItem key={country.id} value={country.id}>
+                  {country.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        )}
       />
       {errors?.country && (
         <Typography color="red" component="p">
@@ -170,10 +198,13 @@ export const RegisterForm = () => {
         control={<Checkbox value="remember" color="primary" />}
         label="Remember me"
       />
-      <StyledButton type="submit" fullWidth variant="contained" disabled={saving}>
-        {
-          (saving) ? 'Saving...' : 'Register'
-        }
+      <StyledButton
+        type="submit"
+        fullWidth
+        variant="contained"
+        disabled={saving}
+      >
+        {saving ? "Saving..." : "Register"}
       </StyledButton>
     </Box>
   );
