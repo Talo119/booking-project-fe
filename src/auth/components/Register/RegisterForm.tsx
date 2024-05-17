@@ -11,17 +11,21 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { CreateUser } from "../../../api/models/User.model";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useAppDispatch } from '../../../store/hooks';
+import { registerUser } from "../../../store/auth/thunks";
+import { useState } from "react";
 
 const schema = yup
   .object({
     name: yup.string().required(),
     email: yup.string().email().required(),
-    country: yup.string().required(),
+    country: yup.string().min(2).required(),
     password: yup.string().min(3).required(),
+    confirmPassword: yup.string().min(3).oneOf([yup.ref('passorwd')], 'Las contraseñas deben coincidir').required(),
   })
   .required();
 
@@ -33,22 +37,32 @@ export const RegisterForm = () => {
       backgroundColor: theme.palette.primary.main,
     };
   });
+  const dispatch =  useAppDispatch();
+  const [saving, setSaving] = useState(false);
   const {
+    control,
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<CreateUser>({
     defaultValues: {
       name: "",
       email: "",
-      country: "0",
+      country: "662a9a74f6468eee52f82949",
       password: "",
-      img: "",
+      confirmPassword:"",
+      img: "test",
+      roles:['ADMIN_ROLE'],
     },
     resolver: yupResolver(schema),
   });
   const onSubmit: SubmitHandler<CreateUser> = (data) => {
+    setSaving(true);
     console.log(data);
+    dispatch(registerUser(data));
+    reset();
+    setSaving(false);
   };
   return (
     <Box
@@ -57,38 +71,49 @@ export const RegisterForm = () => {
       noValidate
       sx={{ mt: 1 }}
     >
-      <TextField
-        {...register("name")}
-        margin="normal"
-        required
-        fullWidth
-        id="name"
-        label="Name"
+      <Controller
         name="name"
-        autoComplete="name"
-        autoFocus
+        control={control}
+        render={({field}) =>
+          <TextField
+            {...field}
+            margin="normal"
+            required
+            fullWidth
+            id="name"
+            label="Name"
+            name="name"
+            autoComplete="name"
+            autoFocus
+          />
+        }
       />
       {errors?.name && (
         <Typography color="red" component="p">
           {errors?.name.message}
         </Typography>
       )}
-
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">País</InputLabel>
-        <Select
-          {...register("country")}
-          labelId="pais-label"
-          id="country"
-          label="country"
-          fullWidth
-        >
-          <MenuItem value={"0"}>--Seleccione--</MenuItem>
-          <MenuItem value={"662a9a74f6468eee52f82949"}>Honduras</MenuItem>
-          <MenuItem value={"20"}>México</MenuItem>
-          <MenuItem value={"30"}>Argentina</MenuItem>
-        </Select>
-      </FormControl>
+      <Controller
+        name="country"
+        control={control}
+        render={({field}) =>
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">País</InputLabel>
+          <Select
+            {...field}
+            labelId="pais-label"
+            id="country"
+            label="country"
+            fullWidth
+          >
+            {/* <MenuItem value={"0"}>--Seleccione--</MenuItem> */}
+            <MenuItem value={"662a9a74f6468eee52f82949"}>Honduras</MenuItem>
+            <MenuItem value={"20"}>México</MenuItem>
+            <MenuItem value={"30"}>Argentina</MenuItem>
+          </Select>
+        </FormControl>
+        }
+      />
       {errors?.country && (
         <Typography color="red" component="p">
           {errors?.country.message}
@@ -125,12 +150,30 @@ export const RegisterForm = () => {
           {errors?.password.message}
         </Typography>
       )}
+      <TextField
+        {...register("confirmPassword")}
+        margin="normal"
+        required
+        fullWidth
+        name="confirmPassword"
+        label="ConfirmPassword"
+        type="password"
+        id="confirmPassword"
+        autoComplete="current-confirmPassword"
+      />
+      {errors?.confirmPassword && (
+        <Typography color="red" component="p">
+          {errors?.confirmPassword.message}
+        </Typography>
+      )}
       <FormControlLabel
         control={<Checkbox value="remember" color="primary" />}
         label="Remember me"
       />
-      <StyledButton type="submit" fullWidth variant="contained">
-        Register
+      <StyledButton type="submit" fullWidth variant="contained" disabled={saving}>
+        {
+          (saving) ? 'Saving...' : 'Register'
+        }
       </StyledButton>
     </Box>
   );
