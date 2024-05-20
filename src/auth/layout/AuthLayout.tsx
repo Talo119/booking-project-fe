@@ -1,4 +1,4 @@
-import { Copyright, LockOutlined } from "@mui/icons-material";
+import { LockOutlined } from "@mui/icons-material";
 import { Avatar, Box, Container, Typography } from "@mui/material";
 import { ReactElement } from "react";
 
@@ -12,7 +12,7 @@ export const AuthLayout = ({children, title}: AuthLayoutProps) => {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 8,
+          marginTop: 6,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -26,7 +26,6 @@ export const AuthLayout = ({children, title}: AuthLayoutProps) => {
         </Typography>
             { children }
       </Box>
-      <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );
 };

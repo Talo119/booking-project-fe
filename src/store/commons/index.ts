@@ -4,3 +4,9 @@ export enum DataState {
     ERROR,
     FULFILLED,
 }
+
+export enum LoginState {
+    CHECKING,
+    AUTHENTICATED,
+    NOTAUTHENTICATED,
+}

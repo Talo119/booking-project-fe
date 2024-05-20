@@ -1,9 +1,7 @@
 import {
   Box,
   Button,
-  Checkbox,
   FormControl,
-  FormControlLabel,
   InputLabel,
   MenuItem,
   Select,
@@ -200,10 +198,10 @@ export const RegisterForm = () => {
               {errors?.confirmPassword.message}
             </Typography>
           )}
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
-          />
+          /> */}
           <StyledButton
             type="submit"
             fullWidth

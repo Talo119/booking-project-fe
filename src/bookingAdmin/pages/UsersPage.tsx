@@ -2,7 +2,7 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { AdminLayout } from "../layout/AdminLayout";
 import { useSelector } from "react-redux";
-import { selectUsers } from "../../store/auth/authSlice";
+import { selectUsers } from "../../store/auth/userSlice";
 import { useAppDispatch } from "../../store/hooks";
 import { getUsers } from "../../store/auth/thunks";
 import { useEffect } from "react";
