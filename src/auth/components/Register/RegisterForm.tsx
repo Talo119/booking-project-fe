@@ -26,6 +26,7 @@ import {
 import { getCountries } from "../../../store/admin/country/thunks";
 import { DataState } from "../../../store/commons";
 import { useNavigate } from "react-router-dom";
+import { RegisterFormSkeleton } from "../../pages/Register/RegisterPageSkeleton";
 
 const schema = yup
   .object({
@@ -91,121 +92,128 @@ export const RegisterForm = () => {
     }
     setSaving(false);
   };
+  const isLoading = countriesState === DataState.LOADING;
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit(onSubmit)}
-      noValidate
-      sx={{ mt: 1 }}
-    >
-      <Controller
-        name="name"
-        control={control}
-        render={({ field }) => (
+    <>
+      {isLoading ? (
+        <RegisterFormSkeleton />
+      ) : (
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          sx={{ mt: 1 }}
+        >
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                margin="normal"
+                required
+                fullWidth
+                id="name"
+                label="Name"
+                name="name"
+                autoComplete="name"
+                autoFocus
+              />
+            )}
+          />
+          {errors?.name && (
+            <Typography color="red" component="p">
+              {errors?.name.message}
+            </Typography>
+          )}
+          <Controller
+            name="country"
+            control={control}
+            render={({ field }) => (
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">País</InputLabel>
+                <Select
+                  {...field}
+                  labelId="pais-label"
+                  id="country"
+                  label="country"
+                  fullWidth
+                >
+                  {countries.map((country) => (
+                    <MenuItem key={country.id} value={country.id}>
+                      {country.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
+          {errors?.country && (
+            <Typography color="red" component="p">
+              {errors?.country.message}
+            </Typography>
+          )}
           <TextField
-            {...field}
+            {...register("email")}
             margin="normal"
             required
             fullWidth
-            id="name"
-            label="Name"
-            name="name"
-            autoComplete="name"
-            autoFocus
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
           />
-        )}
-      />
-      {errors?.name && (
-        <Typography color="red" component="p">
-          {errors?.name.message}
-        </Typography>
+          {errors?.email && (
+            <Typography color="red" component="p">
+              {errors?.email.message}
+            </Typography>
+          )}
+          <TextField
+            {...register("password")}
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+          />
+          {errors?.password && (
+            <Typography color="red" component="p">
+              {errors?.password.message}
+            </Typography>
+          )}
+          <TextField
+            {...register("confirmPassword")}
+            margin="normal"
+            required
+            fullWidth
+            name="confirmPassword"
+            label="ConfirmPassword"
+            type="password"
+            id="confirmPassword"
+            autoComplete="current-confirmPassword"
+          />
+          {errors?.confirmPassword && (
+            <Typography color="red" component="p">
+              {errors?.confirmPassword.message}
+            </Typography>
+          )}
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
+          />
+          <StyledButton
+            type="submit"
+            fullWidth
+            variant="contained"
+            disabled={saving}
+          >
+            {saving ? "Saving..." : "Register"}
+          </StyledButton>
+        </Box>
       )}
-      <Controller
-        name="country"
-        control={control}
-        render={({ field }) => (
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">País</InputLabel>
-            <Select
-              {...field}
-              labelId="pais-label"
-              id="country"
-              label="country"
-              fullWidth
-            >
-              {countries.map((country) => (
-                <MenuItem key={country.id} value={country.id}>
-                  {country.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        )}
-      />
-      {errors?.country && (
-        <Typography color="red" component="p">
-          {errors?.country.message}
-        </Typography>
-      )}
-      <TextField
-        {...register("email")}
-        margin="normal"
-        required
-        fullWidth
-        id="email"
-        label="Email Address"
-        name="email"
-        autoComplete="email"
-      />
-      {errors?.email && (
-        <Typography color="red" component="p">
-          {errors?.email.message}
-        </Typography>
-      )}
-      <TextField
-        {...register("password")}
-        margin="normal"
-        required
-        fullWidth
-        name="password"
-        label="Password"
-        type="password"
-        id="password"
-        autoComplete="current-password"
-      />
-      {errors?.password && (
-        <Typography color="red" component="p">
-          {errors?.password.message}
-        </Typography>
-      )}
-      <TextField
-        {...register("confirmPassword")}
-        margin="normal"
-        required
-        fullWidth
-        name="confirmPassword"
-        label="ConfirmPassword"
-        type="password"
-        id="confirmPassword"
-        autoComplete="current-confirmPassword"
-      />
-      {errors?.confirmPassword && (
-        <Typography color="red" component="p">
-          {errors?.confirmPassword.message}
-        </Typography>
-      )}
-      <FormControlLabel
-        control={<Checkbox value="remember" color="primary" />}
-        label="Remember me"
-      />
-      <StyledButton
-        type="submit"
-        fullWidth
-        variant="contained"
-        disabled={saving}
-      >
-        {saving ? "Saving..." : "Register"}
-      </StyledButton>
-    </Box>
+    </>
   );
 };

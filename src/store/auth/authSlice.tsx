@@ -36,18 +36,19 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(registerUser.fulfilled, (state, action) => {
-      state.data = [...(state.data || []), action.payload];
-      state.dataState = DataState.FULFILLED;
-    })
-    .addCase(getUsers.pending, (state) => {
+    builder
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.data = [...(state.data || []), action.payload];
+        state.dataState = DataState.FULFILLED;
+      })
+      .addCase(getUsers.pending, (state) => {
         state.dataState = DataState.LOADING;
-    })
-    .addCase(getUsers.fulfilled, (state, action) =>{
+      })
+      .addCase(getUsers.fulfilled, (state, action) => {
         state.data = action.payload ?? EMPTY_DATA;
         state.totalUsers = action.payload.length;
         state.dataState = DataState.FULFILLED;
-    });
+      });
   },
 });
 
