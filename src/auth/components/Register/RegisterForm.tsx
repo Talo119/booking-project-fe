@@ -67,7 +67,7 @@ export const RegisterForm = () => {
       password: "",
       confirmPassword: "",
       img: "test",
-      roles: ["ADMIN_ROLE"],
+      roles: ["BUYER_ROLE"],
     },
     resolver: yupResolver(schema),
   });

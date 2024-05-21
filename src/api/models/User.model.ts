@@ -33,4 +33,4 @@ export type AuthenticatedUser = {
   token: string;
 }
 
-type Roles = "BUYER_ROLE" | "ADMIN_ROLE";
+export type Roles = "BUYER_ROLE" | "ADMIN_ROLE";

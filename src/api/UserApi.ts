@@ -16,7 +16,7 @@ export const userDatasource = (axios: AxiosInstance) => {
       return resp.data;
     },
     loginUser: async (user: LoginUser): Promise<AuthenticatedUser> => {
-      const resp = await axios.post<AuthenticatedUser>("/auth", user);
+      const resp = await axios.post<AuthenticatedUser>("/auth/login", user);
       return resp.data;
     },
   };

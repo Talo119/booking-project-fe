@@ -29,7 +29,6 @@ const loginSlice = createSlice({
     reducers:{
         logout(state) {
             state.loginState = LoginState.NOTAUTHENTICATED;
-
         },
     },
     extraReducers: (builder) => {
