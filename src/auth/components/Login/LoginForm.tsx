@@ -53,7 +53,7 @@ export const LoginForm = () => {
       console.log(user);
       reset();
       if (user.roles.some((rol) => rol === "ADMIN_ROLE")) {
-        navigate("/admin");
+        navigate("/admin/");
       } else {
         navigate("/client");
       }
