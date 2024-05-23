@@ -9,6 +9,7 @@ export const NavBar = ({drawerWith = 240}) => {
       sx={{
         width: { sm: `calc(100% - ${drawerWith}px)` },
         ml: { sm: `${drawerWith}px` },
+        backgroundColor: `${theme.palette.primary.dark}`
       }}
     >
       <Toolbar>
